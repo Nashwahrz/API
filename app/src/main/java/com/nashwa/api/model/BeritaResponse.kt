@@ -13,6 +13,6 @@ data class BeritaResponse(
         val isi: String,
         val tgl_indonesia_berita: String,
         val gambar : String,
-        val rating : Float
+        val rating : Double
     )
 }

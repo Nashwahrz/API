@@ -3,6 +3,7 @@ package com.nashwa.api
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.Toast
@@ -26,6 +27,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var rvBerita : RecyclerView
     private lateinit var floatBtnTambah : FloatingActionButton
     private lateinit var  beritaAdapter: BeritaAdapter
+    private lateinit var imgNotFound : ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,10 +42,22 @@ class DashboardActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         rvBerita = findViewById(R.id.rvBerita)
         floatBtnTambah = findViewById(R.id.floatBtnTambah)
+        imgNotFound = findViewById(R.id.imgNotFound)
 
 
         //panggil method getBerita
         getBerita("")
+
+        svJudul.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(pencarian: String?): Boolean {
+               getBerita(pencarian.toString())
+                return true
+            }
+        })
 
 
 
@@ -63,11 +77,13 @@ class DashboardActivity : AppCompatActivity() {
                         beritaAdapter = BeritaAdapter(arrayListOf())
                         rvBerita.adapter = beritaAdapter
                         beritaAdapter.setData(response.body()!!.data)
+                        imgNotFound.visibility = View.GONE
                     }
                     else {
                         //jika data tidak ditemukan
                         beritaAdapter = BeritaAdapter(arrayListOf())
                         rvBerita.adapter = beritaAdapter
+                        imgNotFound.visibility = View.VISIBLE
 
                     }
                 }
